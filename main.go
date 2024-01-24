@@ -19,16 +19,23 @@ type Cep struct {
 }
 
 func main() {
-	http.HandleFunc("/", buscaCEP)
+	http.HandleFunc("/cep", buscaCEP)
 	http.ListenAndServe(":8080", nil)
 }
 
 func buscaCEP(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Content-Type", "application/json")
 
-	if request.URL.Path != "/" {
+	if request.URL.Path != "/cep" {
 		response.WriteHeader(http.StatusNotFound)
 		response.Write([]byte(`{"message": "Not Found"}`))
+		return
+	}
+
+	cep := request.URL.Query().Get("cep")
+	if cep == "" {
+		response.WriteHeader(http.StatusBadRequest)
+		response.Write([]byte(`{"message": "cep is required"}`))
 		return
 	}
 
