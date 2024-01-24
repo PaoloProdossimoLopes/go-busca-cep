@@ -24,8 +24,13 @@ func main() {
 }
 
 func buscaCEP(response http.ResponseWriter, request *http.Request) {
-	headers := response.Header()
-	headers.Set("Content-Type", "application/json")
+	response.Header().Set("Content-Type", "application/json")
+
+	if request.URL.Path != "/" {
+		response.WriteHeader(http.StatusNotFound)
+		response.Write([]byte(`{"message": "Not Found"}`))
+		return
+	}
 
 	response.Write([]byte(`{"cep":"01001-000","logradouro":"Praça da Sé","complemento":"lado ímpar","bairro":"Sé","localidade":"São Paulo","uf":"SP","ibge":"3550308","gia":"1004","ddd":"11","siafi":"7107"}`))
 }
