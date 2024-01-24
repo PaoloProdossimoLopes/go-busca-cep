@@ -19,5 +19,13 @@ type Cep struct {
 }
 
 func main() {
+	http.HandleFunc("/", buscaCEP)
 	http.ListenAndServe(":8080", nil)
+}
+
+func buscaCEP(response http.ResponseWriter, request *http.Request) {
+	headers := response.Header()
+	headers.Set("Content-Type", "application/json")
+
+	response.Write([]byte(`{"cep":"01001-000","logradouro":"Praça da Sé","complemento":"lado ímpar","bairro":"Sé","localidade":"São Paulo","uf":"SP","ibge":"3550308","gia":"1004","ddd":"11","siafi":"7107"}`))
 }
